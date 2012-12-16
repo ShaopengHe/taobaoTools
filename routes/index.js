@@ -10,28 +10,24 @@ function bindOnRoute(app) {
     var route = new Route(app);
 
     //add route handler here
-    route.addHandler('get', '/', function(req, res) {
-        res.render('index', { title: 'Express' })
+    route.addHandler('get', '/', function(req, callback) {
+        callback(null, {view:'index', data:{ title: 'Express' }});
     });
-    route.addHandler('get', '/test', function(req,res) {
-        res.end('test');
+    route.addHandler('get', '/test', function(req, callback) {
+        callback(null, {view:'index', data:{ title: 'Test' }});
     });
 
     //item
-    route.addHandler('get', '/item/:id', function(req, res, next){
+    route.addHandler('post', '/item/:id', function(req, callback){
         var itemId = req.params.id;
-        itemControllers.add(itemId, function(err, item){
-            if(err) {
-                next(err);
-            }
-            else {
-                res.end(JSON.stringify(item));
-            }
+        itemControllers.add(itemId, function(err, reply){
+            callback(err, reply);
         })
     });
     
     return route.getApp();
 }
+
 
 module.exports = {
     bind: bindOnRoute

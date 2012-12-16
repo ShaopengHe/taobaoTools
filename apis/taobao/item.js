@@ -9,7 +9,7 @@ var Item = function() {
     this.client = require('top.js').createClient({
         app_key: config.taobaoApp.key
         , app_secret: config.taobaoApp.secret
-        , debug: true
+        , debug: false
     });
 };
 

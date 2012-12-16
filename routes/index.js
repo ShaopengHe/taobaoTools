@@ -2,6 +2,8 @@
  * Route class
  */
 
+var controllers = require('../controllers');
+var itemControllers = controllers.item;
 var Route = require("./route");
 
 function bindOnRoute(app) {
@@ -13,6 +15,19 @@ function bindOnRoute(app) {
     });
     route.addHandler('get', '/test', function(req,res) {
         res.end('test');
+    });
+
+    //item
+    route.addHandler('get', '/item/:id', function(req, res, next){
+        var itemId = req.params.id;
+        itemControllers.add(itemId, function(err, item){
+            if(err) {
+                next(err);
+            }
+            else {
+                res.end(JSON.stringify(item));
+            }
+        })
     });
     
     return route.getApp();

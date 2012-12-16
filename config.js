@@ -14,10 +14,17 @@ var redis = {
     port: '6379'
 };
 
+var mongodb = {
+    host: 'localhost',
+    port: '27017',
+    database: 'taobao_tools'
+};
+
 var config = {
     port:  8080,
     taobaoApp: taobaoApp,
-    redis: redis
+    redis: redis,
+    mongodb: mongodb
 }
 
 module.exports  = config;

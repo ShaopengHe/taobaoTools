@@ -12,6 +12,7 @@ var logger = require('log4js').getLogger(__filename);
 var ItemStream = function () {
     this.ITEM_STATE_COLLECT = 'item:collect';
     this.ITEM_STATE_STORE = 'item:store';
+    this.ITEM_STATE_RETRIEVE = 'item:retrieve';
     this.retryTimes = 1;
 };
 
@@ -59,6 +60,33 @@ itemStream.on(itemStream.ITEM_STATE_STORE, function(id, item, tryTimes) {
         }
         else {
             logger.info("collect item: " + id + ' success');
+        }
+    });
+});
+
+/**
+ * retrieve item
+ */
+itemStream.on(itemStream.ITEM_STATE_RETRIEVE, function(id, tryTimes, cbf) {
+    if (!cbf && typeof tryTimes === 'function') {
+        cbf = tryTimes;
+        tryTimes = this.retryTimes;
+    }
+    itemApi.retrieve(id, function(err, item) {
+        if (err) {
+            logger.error(err);
+            if (tryTimes) {
+                logger.debug('retry...');
+                itemStream.emit(itemStream.ITEM_STATE_RETRIEVE, id, --tryTimes, cbf);
+            }
+            else {
+                logger.error('retrieve item: ' + id + 'faild');
+                cbf(err);
+            }
+        }
+        else {
+            logger.info("retrieve item: " + id + ' success');
+            cbf(null, item);
         }
     });
 });

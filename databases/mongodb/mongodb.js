@@ -78,10 +78,10 @@ MongoDB.prototype.find = function(collection, query, fields, options, cbf) {
 };
 
 module.exports = MongoDB;
-var client = new MongoDB();
+//var client = new MongoDB();
 
-setTimeout(
-    function() {
+//setTimeout(
+//    function() {
 //        client.insert('test', {a:1});
 //        var start = Date.now();
 //        client.insert('test', {a:2, b:Math.random()}, function(err, docs) {
@@ -101,11 +101,11 @@ setTimeout(
 //            console.log(Date.now() - start);
 //            console.log(docs);
 //        });
-        var start = Date.now()
-        client.find('test', {a:{$exists:true}},{_id:0},{skip:0,limit:20,sort:{b:1}}, function(err, doc){
-            if (err) console.log(err);
-            console.log(Date.now() - start);
-            console.log(doc);
-        });
-    }, 1000
-);
+//        var start = Date.now()
+//        client.find('test', {a:{$exists:true}},{_id:0},{skip:0,limit:20,sort:{b:1}}, function(err, doc){
+//            if (err) console.log(err);
+//            console.log(Date.now() - start);
+//            console.log(doc);
+//        });
+//    }, 1000
+//);

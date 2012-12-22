@@ -15,5 +15,8 @@ Item.prototype.add = function (itemId, cbf) {
     cbf(null);
 };
 
+Item.prototype.retrieve = function (itemId, cbf) {
+    itemStream.emit(itemStream.ITEM_STATE_RETRIEVE, itemId, cbf);
+};
 
 module.exports = new Item();

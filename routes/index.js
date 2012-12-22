@@ -24,6 +24,13 @@ function bindOnRoute(app) {
             callback(err, reply);
         })
     });
+
+    route.addHandler('get', '/item/:id', function(req, callback){
+        var itemId = req.params.id;
+        itemControllers.retrieve(itemId, function(err, reply) {
+            callback(err, reply);
+        });
+    });
     
     return route.getApp();
 }

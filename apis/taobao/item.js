@@ -35,4 +35,8 @@ Item.prototype.update = function(itemId, newObj, cbf) {
     this.mongodbClient.update(this.collectionName, {itemId: itemId}, {$set: newObj}, {upsert: true}, cbf);
 };
 
+Item.prototype.retrieve = function(itemId, cbf) {
+    this.mongodbClient.find(this.collectionName, {itemId: itemId}, cbf);
+};
+
 module.exports = new Item();

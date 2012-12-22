@@ -13,7 +13,7 @@ var ItemStream = function () {
     this.ITEM_STATE_COLLECT = 'item:collect';
     this.ITEM_STATE_STORE = 'item:store';
     this.ITEM_STATE_RETRIEVE = 'item:retrieve';
-    this.retryTimes = 1;
+    this.retryTimes = 3;
 };
 
 util.inherits(ItemStream, events.EventEmitter);

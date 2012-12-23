@@ -5,8 +5,8 @@
  */
 
 var taobaoApp = {
-    key: '12309206',
-    secret: 'a6f988fe659e9b76a6fc4f749b13b9b3'
+    key: 'xxxx',
+    secret: 'xxxxx'
 };
 
 var redis = {

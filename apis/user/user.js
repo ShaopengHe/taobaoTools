@@ -40,17 +40,30 @@ User.prototype.login = function(username, password) {
 
 };
 
+User.prototype.retrieve = function(username, cbf) {
+    this.mongodbClient.find(this.collectionName, {username:username}, function(err, docs){
+        cbf(err, docs[0]);
+    });
+};
+
+User.prototype.update = function(username, data, cbf) {
+    if(!data.updatedAt) {
+        data.updatedAt = Date.now();
+    }
+    this.mongodbClient.update(this.collectionName,{username:username}, {$set:data}, cbf);
+};
+
 module.exports = new User();
 
 var user = new User();
 
 setTimeout(function() {
-    user.signUp({
-        username:'ssad',
-        password:'a',
-        phone:123456
-    }, function(err, user) {
-        if (err) console.log(err);
-        console.log(user);
-    });
+//    user.signUp({
+//        username:'ssad',
+//        password:'a',
+//        phone:123456
+//    }, function(err, user) {
+//        if (err) console.log(err);
+//        console.log(user);
+//    });
 }, 1000);

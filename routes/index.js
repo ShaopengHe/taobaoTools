@@ -3,7 +3,8 @@
  */
 
 var controllers = require('../controllers');
-var itemControllers = controllers.item;
+var itemControllers = controllers.item
+  , userControllers = controllers.user;
 var Route = require("./route");
 
 function bindOnRoute(app) {
@@ -30,6 +31,11 @@ function bindOnRoute(app) {
         itemControllers.retrieve(itemId, function(err, reply) {
             callback(err, reply);
         });
+    });
+
+    //user
+    route.addHandler('get', '/login/taobao', function(req, callback){
+        userControllers.loginFromTaobao(req.query, callback);
     });
     
     return route.getApp();

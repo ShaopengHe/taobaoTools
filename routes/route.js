@@ -15,8 +15,13 @@ Route.prototype.getApp = function () {
 
 Route.prototype.addHandler = function (method, path, handler) {
     return this.app[method](path, function(req, res, next) {
-        handler(req, function(err, data) {
-            responseHandler(err, data, req, res, next);
+        handler(req, function(err, data, redirect) {
+            if(redirect) {
+                res.redirect(redirect.url, redirect.status);
+            }
+            else {
+                responseHandler(err, data, req, res, next);
+            }
         });
     });
 }

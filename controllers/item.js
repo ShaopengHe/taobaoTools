@@ -12,7 +12,7 @@ var Item = function() {
 
 Item.prototype.add = function (itemId, cbf) {
     itemStream.emit(itemStream.ITEM_STATE_COLLECT, itemId);
-    cbf(null);
+    cbf(null, {itemId: itemId});
 };
 
 Item.prototype.retrieve = function (itemId, cbf) {

@@ -44,14 +44,22 @@ User.prototype.loginFromTaobao = function (params, cbf) {
                 },
                 function(user, callback) {
                     //update topSession
+                    var lastLoginAt = Date.now();
+                    console.log(lastLoginAt);
                     if (user) {
-                        userApi.update(username, {topSession: topSession, topRefreshToken: topParameters.refresh_token}, function(err){
+                        userApi.update(username, {
+                            topSession: topSession,
+                            topRefreshToken: topParameters.refresh_token,
+                            lastLoginAt: lastLoginAt
+                        }, function(err){
                             if(err) {
                                 callback(err);
                             }
                             else {
                                 user.topSession = topSession;
                                 user.topRefreshToken = topParameters.refresh_token;
+                                user.updatedAt = lastLoginAt;
+                                user.lastLoginAt = lastLoginAt;
                                 callback(null, user);
                             }
                         });
@@ -63,7 +71,8 @@ User.prototype.loginFromTaobao = function (params, cbf) {
                             password: topParameters.visitor_id,
                             topId: topParameters.visitor_id,
                             topSession: topSession,
-                            topRefreshToken: topParameters.refresh_token
+                            topRefreshToken: topParameters.refresh_token,
+                            lastLoginAt: lastLoginAt
                         };
                         userApi.signUp(userInfo, callback);
                     }

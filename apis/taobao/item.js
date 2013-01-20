@@ -21,6 +21,10 @@ var Item = function() {
     this.mongodbClient = new MongoDB();
 };
 
+Item.prototype.find = function (query, fields, options, cbf) {
+    this.mongodbClient.find(this.collectionName, query, fields, options, cbf);
+};
+
 Item.prototype.collect = function(itemId, fields, cbf) {
     if (!itemId || !fields) {
         cbf('require params: "itemId" and "fields"');

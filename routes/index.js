@@ -19,6 +19,17 @@ function bindOnRoute(app) {
     });
 
     //item
+    route.addHandler('get', '/item', function(req, callback) {
+        var query = {};
+        var options = {
+            p : req.query.p || 1
+        };
+        itemControllers.get(query, options, function(err, reply) {
+            callback(err, reply);
+        });
+    });
+
+
     route.addHandler('post', '/item/:id', function(req, callback){
         var itemId = req.params.id;
         itemControllers.add(itemId, function(err, reply){

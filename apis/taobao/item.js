@@ -41,7 +41,7 @@ Item.prototype.update = function(itemId, newObj, cbf) {
 };
 
 Item.prototype.retrieve = function(itemId, cbf) {
-    this.mongodbClient.find(this.collectionName, {itemId: itemId}, function(err, items){
+    this.mongodbClient.find(this.collectionName, {itemId: itemId}, function(err, items) {
         cbf(err, items[0]);
     });
 };
@@ -50,8 +50,8 @@ Item.prototype.collectImages = function(itemId, cbf) {
     var self = this;
     async.waterfall([
         function(callback) {
-            self.retrieve(itemId, function(err, item){
-                if(err || !item) {
+            self.retrieve(itemId, function(err, item) {
+                if (err || !item) {
                     callback(err || 'item not found');
                 }
                 else {
@@ -61,27 +61,31 @@ Item.prototype.collectImages = function(itemId, cbf) {
         },
         function(item, callback) {
             var itemImagesData = {id:item.itemId, images:[]};
-            if(item.pic_url) {
+            if (item.pic_url) {
                 itemImagesData.images.push(item.pic_url);
             }
-            if(item.item_imgs && item.item_imgs.item_img) {
+            if (item.item_imgs && item.item_imgs.item_img) {
                 var tmp = item.item_imgs.item_img;
-                for(var i = 0, len = tmp.length; i < len; i++) {
+                for (var i = 0, len = tmp.length; i < len; i++) {
                     itemImagesData.images.push(tmp[i].url);
                 }
             }
-            if(item.prop_imgs && item.prop_imgs.prop_img) {
+            if (item.prop_imgs && item.prop_imgs.prop_img) {
                 var tmp = item.prop_imgs.prop_img;
-                for(var i = 0, len = tmp.length; i < len; i++) {
+                for (var i = 0, len = tmp.length; i < len; i++) {
                     itemImagesData.images.push(tmp[i].url);
                 }
             }
-            callback(null, itemImagesData);
+            //get image from item 
+            util.getImagesSrc(item.desc, function(err, imagesUrl) {
+                itemImagesData.images = itemImagesData.images.concat(imagesUrl);
+                callback(null, itemImagesData);
+            });
         },
         function(itemImagesData, callback) {
             var path = ITEM_IMAGES_PATH + itemImagesData.id;
-            util.ensureDir(path, function(err){
-                if(err){
+            util.ensureDir(path, function(err) {
+                if (err) {
                     callback(err);
                 }
                 else {
@@ -92,12 +96,12 @@ Item.prototype.collectImages = function(itemId, cbf) {
         },
         function(itemImagesData, callback) {
             var i = 0;
-            async.forEachLimit(itemImagesData.images, 10, function(itemUrl, callback){
-                (function(i){
+            async.forEachLimit(itemImagesData.images, 10, function(itemUrl, callback) {
+                (function(i) {
                     var targetPath = itemImagesData.path + i + '.' + util.getFileNameSuffix(itemUrl);
-                    util.getImage(itemUrl, targetPath, function(err){
-                        if(err) {
-                            logger.error('item: ' + itemImagesData.id + ', url: ' + itemUrl + 'err: ');
+                    util.getImage(itemUrl, targetPath, function(err) {
+                        if (err) {
+                            logger.error('item: ' + itemImagesData.id + ', url: ' + itemUrl + ' err: ');
                             logger.error(err);
                         }
                         else {
@@ -106,24 +110,24 @@ Item.prototype.collectImages = function(itemId, cbf) {
                         callback(null);
                     });
                 })(i++);
-            }, function(err){
+            }, function(err) {
                 callback(err);
             });
         }
-    ], function(err){
+    ], function(err) {
         cbf(err);
     });
 };
 
 module.exports = new Item();
-setTimeout(function() {
-    module.exports.collectImages("13722416053", function(err) {
-        if(err){
-            logger.error(err);
-        }
-        else {
-            logger.info('collect item: 13722416053' + ' images finished.');
-        }
-    });
-}, 1000);
+//setTimeout(function() {
+//    module.exports.collectImages("13722416053", function(err) {
+//        if(err){
+//            logger.error(err);
+//        }
+//        else {
+//            logger.info('collect item: 13722416053' + ' images finished.');
+//        }
+//    });
+//}, 1000);
 

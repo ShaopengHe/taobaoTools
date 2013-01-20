@@ -13,6 +13,7 @@ var ItemStream = function () {
     this.ITEM_STATE_COLLECT = 'item:collect';
     this.ITEM_STATE_STORE = 'item:store';
     this.ITEM_STATE_RETRIEVE = 'item:retrieve';
+    this.ITEM_STATE_COLLECT_PICS = 'item:collect:pics';
     this.retryTimes = 3;
 };
 
@@ -60,6 +61,7 @@ itemStream.on(itemStream.ITEM_STATE_STORE, function(id, item, tryTimes) {
         }
         else {
             logger.info("collect item: " + id + ' success');
+            itemStream.emit(itemStream.ITEM_STATE_COLLECT_PICS, id);
         }
     });
 });
@@ -92,12 +94,32 @@ itemStream.on(itemStream.ITEM_STATE_RETRIEVE, function(id, tryTimes, cbf) {
 });
 
 
-itemStream.on(itemStream.ITEM_STATE_COLLECT_PICS, function(id, tryTimes, cbf){
+itemStream.on(itemStream.ITEM_STATE_COLLECT_PICS, function(id, tryTimes, cbf) {
     if (!cbf && typeof tryTimes === 'function') {
         cbf = tryTimes;
         tryTimes = this.retryTimes;
     }
-    itemApi.collectImages();
+    if (!cbf) {
+        cbf = function() {
+        };
+    }
+    itemApi.collectImages(id, function(err) {
+        if (err) {
+            logger.error(err);
+            if (tryTimes) {
+                logger.debug('retry...');
+                itemStream.emit(itemStream.ITEM_STATE_COLLECT_PICS, id, --tryTimes, cbf);
+            }
+            else {
+                logger.error('collect images item: ' + id + 'faild');
+                cbf(err);
+            }
+        }
+        else {
+            logger.info("collect images item: " + id + ' success');
+            cbf(null);
+        }
+    });
 });
 
 module.exports = itemStream;

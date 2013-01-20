@@ -38,7 +38,7 @@ itemStream.on(itemStream.ITEM_STATE_COLLECT, function(itemId, tryTimes) {
             }
         }
         else {
-            itemStream.emit(itemStream.ITEM_STATE_STORE, itemId, item);
+            itemStream.emit(itemStream.ITEM_STATE_STORE, itemId, item.item);
         }
     });
 });
@@ -89,6 +89,15 @@ itemStream.on(itemStream.ITEM_STATE_RETRIEVE, function(id, tryTimes, cbf) {
             cbf(null, item);
         }
     });
+});
+
+
+itemStream.on(itemStream.ITEM_STATE_COLLECT_PICS, function(id, tryTimes, cbf){
+    if (!cbf && typeof tryTimes === 'function') {
+        cbf = tryTimes;
+        tryTimes = this.retryTimes;
+    }
+    itemApi.collectImages();
 });
 
 module.exports = itemStream;

@@ -30,6 +30,7 @@ Item.prototype.get = function (query, opts, cbf) {
     var fields = {
         itemId : 1,
         title : 1,
+        price : 1,
         pic_url : 1,
         freight_payer : 1
     };

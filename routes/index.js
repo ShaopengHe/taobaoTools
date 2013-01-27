@@ -25,7 +25,7 @@ function bindOnRoute(app) {
             p : req.query.p || 1
         };
         itemControllers.get(query, options, function(err, reply) {
-            callback(err, reply);
+            callback(err, {view:'items', data:{title: 'Items', items: reply}});
         });
     });
 

@@ -23,6 +23,7 @@ User.prototype.loginFromTaobao = function (params, cbf) {
         , topSession = params.top_session
         , topSign = params.top_sign;
     var errRedirect = {url: 'http://container.api.taobao.com/container?appkey=21335375'};
+    var indexRedirect = {url: '/items'};
 
     var verified = isValidTopSign(config.taobaoApp.key, config.taobaoApp.secret, topParameters, topSession, topSign);
     //无效签名
@@ -83,7 +84,7 @@ User.prototype.loginFromTaobao = function (params, cbf) {
                     cbf(null, null, errRedirect);
                 }
                 else {
-                    cbf(null, user);
+                    cbf(null, null, indexRedirect);
                 }
             });
         }

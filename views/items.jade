@@ -1,0 +1,30 @@
+link(rel='stylesheet', href='/stylesheets/items.css')
+- var items = items;
+div(class="itemsContainer")
+	if items.length
+		table
+			tr.itemContainer
+				td= 'item id'
+				td= 'pic'
+				td= 'price'
+				td= 'title'
+				td= 'freight payer'
+			each item in items
+				tr.itemContainer
+					td.itemId
+						a(href='http://item.taobao.com/item.htm?id=' + item.itemId, target="_blank")
+							span= item.itemId
+					td.itemPic
+						a(href=item.pic_url, target="_blank")
+							img(src=item.pic_url + '_190x190.jpg')
+					td.itemPrice
+						span= '￥' + item.price
+					td.itemTitle
+						a(href='http://item.taobao.com/item.htm?id=' + item.itemId, target="_blank")
+							span= item.title
+					td.itemFreight
+						span= item.freight_payer
+					
+						
+	else
+		p Sorry, no items found!

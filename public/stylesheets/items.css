@@ -1,0 +1,19 @@
+.itemsContainer table td {
+	border: 1px solid #AAA;
+	text-align: center;
+}
+.itemsContainer table td.itemId {
+	width: 100px;
+}
+.itemsContainer table td.itemPic {
+	width: 190px;
+}
+.itemsContainer table td.itemPrice {
+	width: 60px;
+}
+.itemsContainer table td.itemTitle {
+	width: 600px;
+}
+.itemsContainer table td.itemFreight {
+	width: 80px;
+}

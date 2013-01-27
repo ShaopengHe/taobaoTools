@@ -124,14 +124,3 @@ Item.prototype.collectImages = function(itemId, cbf) {
 };
 
 module.exports = new Item();
-//setTimeout(function() {
-//    module.exports.collectImages("13722416053", function(err) {
-//        if(err){
-//            logger.error(err);
-//        }
-//        else {
-//            logger.info('collect item: 13722416053' + ' images finished.');
-//        }
-//    });
-//}, 1000);
-

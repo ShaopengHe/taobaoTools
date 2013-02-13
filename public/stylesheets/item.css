@@ -1,0 +1,22 @@
+div.itemContainer {
+	margin: 0 auto;
+	width: 960px;
+}
+div.imagesContainer {
+	margin: 50px auto;
+	width: 960px;
+}
+div.infoContainer {
+	float: right;
+	width: 640px;
+}
+div.picContainer {
+	float: left;
+	width: 310px;
+}
+span.fields {
+	display: inline-block;
+	font-weight: bolder;
+	margin: 10px 0px 10px 50px;
+	width: 100px;
+}

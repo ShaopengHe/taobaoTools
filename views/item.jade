@@ -1,0 +1,43 @@
+link(rel='stylesheet', href='/stylesheets/item.css')
+.itemContainer
+	.picContainer
+		a(href=item.pic_url, target="_blank")
+			img(src=item.pic_url + '_310x310.jpg')
+	.infoContainer
+		span.fields 宝贝标题: 
+		a(href='http://item.taobao.com/item.htm?id=' + item.itemId, target="_blank")
+			span=item.title
+		br
+		span.fields 价格:
+		span='￥' + item.price
+		br
+		span.fields 邮费:
+		if item.freight_payer == 'seller'
+			span='包邮'
+		else
+			span='快递: ￥' + item.express_fee + '&nbsp;&nbsp;&nbsp;EMS: ￥' + item.ems_fee + '&nbsp;&nbsp;&nbsp;平邮: ￥' + item.post_fee
+		br
+		span.fields 上架时间:
+		span=item.list_time
+		br
+		span.fields 下架时间:
+		span=item.delist_time
+		br
+		span.fields 修改时间:
+		span=item.modified
+		br
+		span.fields 商家:
+		span=item.nick
+		br
+		span.fields 所在地:
+		span=item.location.state + ' ' + item.location.city
+		br
+.clearfloat
+.imagesContainer
+	span.fields 其他相关图片:
+	br
+	each img in item.imgSrc
+		a(href=img, target="_blank")
+			img(src=img)
+		br
+		br

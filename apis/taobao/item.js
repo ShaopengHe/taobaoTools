@@ -50,6 +50,54 @@ Item.prototype.retrieve = function(itemId, cbf) {
     });
 };
 
+/**
+    collect item images' src
+    cbf (err, srcs)
+*/
+Item.prototype.collectImagesSrc = function(itemId, cbf) {
+    var self = this;
+    async.waterfall([
+        function(callback) {
+            self.retrieve(itemId, function(err, item) {
+                if(err || !item) {
+                    callback(err || 'item not found');
+                } else {
+                    callback(null, item);
+                }
+            });
+        }, 
+        function(item, callback) {
+            var imageSrcs = [];
+            if(item.pic_url) {
+                imageSrcs.push(item.pic_url);
+            }
+            if(item.item_imgs && item.item_imgs.item_img) {
+                var tmp = item.item_imgs.item_img;
+                for(var i = 0, len = tmp.length; i < len; i++) {
+                    imageSrcs.push(tmp[i].url);
+                }
+            }
+            if(item.prop_imgs && item.prop_imgs.prop_img) {
+                var tmp = item.prop_imgs.prop_img;
+                for(var i = 0, len = tmp.length; i < len; i++) {
+                    imageSrcs.push(tmp[i].url);
+                }
+            }
+            //get image from item 
+            util.getImagesSrc(item.desc, function(err, imagesUrl) {
+                imageSrcs = imageSrcs.concat(imagesUrl);
+                callback(null, imageSrcs);
+            });
+        }
+    ], function(err, result) {
+        if(err) {
+            logger.error(err);
+            result = [];
+        }
+        cbf(null, result);
+    });
+};
+
 Item.prototype.collectImages = function(itemId, cbf) {
     var self = this;
     async.waterfall([
@@ -124,3 +172,8 @@ Item.prototype.collectImages = function(itemId, cbf) {
 };
 
 module.exports = new Item();
+// setTimeout(function(){
+//     module.exports.collectImagesSrc('15714454236', function(err, srcs){
+//         console.log (srcs);
+//     });
+// }, 2000);

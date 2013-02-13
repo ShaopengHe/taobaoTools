@@ -39,7 +39,10 @@ itemStream.on(itemStream.ITEM_STATE_COLLECT, function(itemId, tryTimes) {
             }
         }
         else {
-            itemStream.emit(itemStream.ITEM_STATE_STORE, itemId, item.item);
+            itemApi.collectImagesSrc(itemId, function(err, srcs) {
+                item.item.imgSrc = srcs;
+                itemStream.emit(itemStream.ITEM_STATE_STORE, itemId, item.item);
+            });
         }
     });
 });
@@ -61,7 +64,7 @@ itemStream.on(itemStream.ITEM_STATE_STORE, function(id, item, tryTimes) {
         }
         else {
             logger.info("collect item: " + id + ' success');
-            itemStream.emit(itemStream.ITEM_STATE_COLLECT_PICS, id);
+            // itemStream.emit(itemStream.ITEM_STATE_COLLECT_PICS, id);
         }
     });
 });
@@ -93,7 +96,9 @@ itemStream.on(itemStream.ITEM_STATE_RETRIEVE, function(id, tryTimes, cbf) {
     });
 });
 
-
+/**
+    item pic collect
+*/
 itemStream.on(itemStream.ITEM_STATE_COLLECT_PICS, function(id, tryTimes, cbf) {
     if (!cbf && typeof tryTimes === 'function') {
         cbf = tryTimes;

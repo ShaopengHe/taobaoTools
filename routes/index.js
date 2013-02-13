@@ -34,13 +34,13 @@ function bindOnRoute(app) {
         var itemId = req.params.id;
         itemControllers.add(itemId, function(err, reply){
             callback(err, reply);
-        })
+        });
     });
 
     route.addHandler('get', '/item/:id', function(req, callback){
         var itemId = req.params.id;
         itemControllers.retrieve(itemId, function(err, reply) {
-            callback(err, reply);
+            callback(err, {view:'item', data:{title: 'item - ' + reply.title, item: reply}});
         });
     });
 

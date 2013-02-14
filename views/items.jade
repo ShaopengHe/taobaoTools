@@ -12,7 +12,7 @@ div(class="itemsContainer")
 			each item in items
 				tr.itemContainer
 					td.itemId
-						a(href='item/' + item.itemId, target="_blank")
+						a(href='http://item.taobao.com/item.htm?id=' + item.itemId, target="_blank")
 							span= item.itemId
 					td.itemPic
 						a(href=item.pic_url, target="_blank")
@@ -20,7 +20,7 @@ div(class="itemsContainer")
 					td.itemPrice
 						span= '￥' + item.price
 					td.itemTitle
-						a(href='http://item.taobao.com/item.htm?id=' + item.itemId, target="_blank")
+						a(href='item/' + item.itemId, target="_blank")
 							span= item.title
 					td.itemFreight
 						span= item.freight_payer

@@ -6,6 +6,9 @@ div.imagesContainer {
 	margin: 50px auto;
 	width: 960px;
 }
+div.imagesContainer img {
+	border: 4px solid #EEE;
+}
 div.infoContainer {
 	float: right;
 	width: 640px;

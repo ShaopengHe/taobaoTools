@@ -39,10 +39,8 @@ itemStream.on(itemStream.ITEM_STATE_COLLECT, function(itemId, tryTimes) {
             }
         }
         else {
-            itemApi.collectImagesSrc(itemId, function(err, srcs) {
-                item.item.imgSrc = srcs;
-                itemStream.emit(itemStream.ITEM_STATE_STORE, itemId, item.item);
-            });
+            itemStream.emit(itemStream.ITEM_STATE_STORE, itemId, item.item);
+            
         }
     });
 });
@@ -54,19 +52,27 @@ itemStream.on(itemStream.ITEM_STATE_STORE, function(id, item, tryTimes) {
     if (!tryTimes) {
         tryTimes = this.retryTimes;
     }
-    itemApi.update(id, item, function(err, item) {
+    itemApi.update(id, item, function(err) {
         if (err) {
             logger.error(err);
             if (tryTimes) {
                 logger.debug('retry...');
-                itemStream.emit(itemStream.ITEM_STATE_STORE, id, itemId, --tryTimes);
+                itemStream.emit(itemStream.ITEM_STATE_STORE, id, item, --tryTimes);
             }
         }
         else {
-            logger.info("collect item: " + id + ' success');
             // itemStream.emit(itemStream.ITEM_STATE_COLLECT_PICS, id);
+            if(!item.imgSrc) {
+                itemApi.collectImagesSrc(id, function(err, srcs) {
+                    itemStream.emit(itemStream.ITEM_STATE_STORE, id, {imgSrc: srcs});
+                });
+                logger.info("collect item: " + id + ' success');
+            }
+            else {
+                logger.info("collect pic item: " + id + ' success');
+            }
         }
-    });
+    })
 });
 
 /**

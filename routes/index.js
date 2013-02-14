@@ -10,6 +10,16 @@ var Route = require("./route");
 function bindOnRoute(app) {
     var route = new Route(app);
 
+    //error
+    route.addErrorHandler(function(err, callback) {
+        if(err.code == 404) {
+            callback(null, err.code, err.msg);
+        }
+        else {
+            callback(null);
+        }
+    });
+
     //add route handler here
     route.addHandler('get', '/', function(req, callback) {
         callback(null, {view:'index', data:{ title: 'Express' }});
@@ -40,7 +50,12 @@ function bindOnRoute(app) {
     route.addHandler('get', '/item/:id', function(req, callback){
         var itemId = req.params.id;
         itemControllers.retrieve(itemId, function(err, reply) {
-            callback(err, {view:'item', data:{title: 'item - ' + reply.title, item: reply}});
+            if(!reply) {
+                callback({code: 404, msg: 'item id: ' + itemId + ' not found'}, {view: 'item', data: {}});
+            }
+            else {
+                callback(err, {view:'item', data:{title: 'item - ' + reply.title, item: reply}});
+            }
         });
     });
 

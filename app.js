@@ -20,13 +20,12 @@ app.configure(function() {
     app.use(app.router);
     app.use(express.static(__dirname + '/public'));
     app.use(function(err, req, res, next) {
-        logger.error(err.stack);
         next(err);
     });
 });
 
 app.configure('development', function() {
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    // app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
 app.configure('production', function() {

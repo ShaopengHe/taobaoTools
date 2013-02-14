@@ -11,7 +11,7 @@ var Route = function (app) {
 
 Route.prototype.getApp = function () {
     return this.app;
-}
+};
 
 Route.prototype.addHandler = function (method, path, handler) {
     return this.app[method](path, function(req, res, next) {
@@ -24,8 +24,20 @@ Route.prototype.addHandler = function (method, path, handler) {
             }
         });
     });
-}
+};
 
+Route.prototype.addErrorHandler = function(handler) {
+    return this.app.use(function(err, req, res, next) {
+        handler(err, function(err, status, data) {
+            if(err) {
+                next(err);
+            }
+            else {
+                res.status(status).send(data);
+            }
+        });
+    });
+};
 
 function responseHandler(err, data, req, res, next) {
     //ajax
